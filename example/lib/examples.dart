@@ -105,6 +105,22 @@ class MyAvatarExample extends StatelessWidget {
                         'https://gitee.com/jacklee1995/example-pictures/raw/master/scenery/jonathanvasquez8950_scenery_2f6031d1-c4fe-41d7-8abf-d1c9c40d9981.png',
                     image: 'assets/asian-boy-avatar.png', // 也可以使用本地图片资源
                   ),
+
+                  // 一个使用SVG的例子
+                  Avatar(
+                    size: 200,
+                    interlayerBorder: Border.all(
+                      color: const Color.fromARGB(255, 224, 172, 0),
+                      width: 20.0,
+                      style: BorderStyle.solid,
+                      strokeAlign: BorderSide.strokeAlignInside,
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    borderRadius: 100,
+                    backgroundImage:
+                        'https://gitee.com/jacklee1995/example-pictures/raw/master/scenery/jonathanvasquez8950_scenery_2f6031d1-c4fe-41d7-8abf-d1c9c40d9981.png',
+                    image: 'assets/assetSvgAvatar.svg', // 以SVG结尾的assets图像或者网络图像
+                  ),
                 ],
               )
             ],

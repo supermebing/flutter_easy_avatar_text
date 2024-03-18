@@ -9,16 +9,21 @@ maintainer: Jcak Lee
 homepage: https://github.com/jacklee1995
 repository: https://github.com/jacklee1995/flutter_easy_avatar
 issue_tracker: https://github.com/jacklee1995/flutter_easy_avatar/issues
-version: 2.0.1
+version: 3.0.0
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   auto_size_text: ^3.0.0
+  cached_network_image: ^3.3.1
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.10+1
+  http: ^1.2.1
   path: ^1.8.3
+  path_provider: ^2.1.2
+  the_utils: ^2.0.1
 
 dev_dependencies:
   flutter_test:

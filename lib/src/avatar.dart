@@ -1,112 +1,76 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'background_layer.dart';
+
 import 'text_layer.dart';
-import 'image_layer.dart';
+import './image_layer_platform/image_layer_platform.dart';
 
 /// A widget that displays an avatar with various customization options.
 ///
-/// 显示具有各种自定义选项的头像的组件。
-///
 /// This widget allows you to display avatars with custom dimensions, border
 /// radius, background color, and an optional background image. You can specify
-/// both network and local images for the avatar.
+/// both network and local images for the avatar, as well as text avatars with
+/// various styling options.
 ///
-/// 此组件允许您显示具有自定义尺寸、边框半径、背景颜色和可选背景图像的头像。
-/// 您可以为头像指定网络和本地图像。
-///
-/// Example usage:
-/// ```dart
-/// Avatar(
-///   size: 150,
-///   borderRadius: 75,
-///   backgroundImage: 'https://example.com/avatar-background.jpg',
-///   backgroundColor: Colors.blue,
-///   image: 'assets/avatar.jpg',
-///   margin: EdgeInsets.all(10),
-///   padding: EdgeInsets.all(5),
-/// )
-/// ```
 class Avatar extends StatelessWidget {
   /// The size of the avatar.
-  /// 头像的大小
+  /// 头像的大小。
   final double size;
 
   /// The border radius of the avatar.
-  /// 头像的边框半径
+  /// 头像的边框半径。
   final double borderRadius;
 
   /// The URL for the background image of the avatar.
-  /// 头像的背景图像的URL
+  /// 头像的背景图像的URL。
   final String? backgroundImage;
 
   /// The background color of the avatar.
-  /// 头像的背景颜色
+  /// 头像的背景颜色。
   final Color? backgroundColor;
 
-  /// The image for the avatar.
-  /// 头像的图像
-  final String image;
+  /// The image for the avatar. This can be a network image, a local asset, or byte data.
+  /// 头像的图像（可以是网络图片、本地资源或字节数据）。
+  final String? image;
 
-  /// The text for the avatar
-  /// 文字头像的文本
+  /// A file image for the avatar, allowing for images stored on the device to be used.
+  /// 设备上存储的图像文件，允许使用设备上的图像。
+  final File? fileImage;
+
+  /// The text to display if using a text avatar.
+  /// 如果使用文字头像，要显示的文本。
   final String text;
 
-  /// Whether to use text avatar mode
-  /// 是否启用文本头像模式，默认为 false
+  /// Whether to use the text avatar mode. Defaults to false.
+  /// 是否启用文本头像模式，默认为 false。
   final bool textMode;
 
-  /// Use capital letters
-  /// 文本转大写
+  /// Whether to convert the text to upper case. Defaults to false.
+  /// 是否将文本转换为大写，默认为 false。
   final bool upperCase;
 
-  /// Number of words, used to display the first characters of multiple words.
-  /// 单词数量，用于显示多个单词的首字符
+  /// The number of words to use from the text for the avatar. Useful for initials.
+  /// 从文本中使用的单词数量，用于头像的首字母缩写。
   final int? wordsCount;
 
   /// The margin around the avatar.
-  /// 头像周围的边距
+  /// 头像周围的边距。
   final EdgeInsetsGeometry margin;
 
-  /// The padding within the avatar, affecting only the avatar image.
-  /// 头像内部的填充，仅影响头像图像
+  /// The padding inside the avatar.
+  /// 头像内部的填充。
   final EdgeInsetsGeometry padding;
 
-  /// The interlayer border for the avatar.
-  /// 头像的中间层边框
+  /// An optional border to apply between the background and the avatar content.
+  /// 可选的边框，应用于背景和头像内容之间。
   final Border? interlayerBorder;
 
-  /// The border for the avatar;
+  /// An optional outer border for the avatar.
+  /// 头像的可选外边框。
   final Border? border;
 
-  /// Creates an Avatar widget.
-  /// 创建Avatar组件
-  ///
-  /// The [width] and [height] parameters determine the dimensions of the
-  /// avatar, and the [borderRadius] parameter controls the corner radius of
-  /// the avatar.
-  ///
-  /// [width]和[height]参数确定了头像的尺寸，[borderRadius]参数控制了头像的角半径。
-  ///
-  /// The [backgroundImage] can be a URL to an image that serves as the avatar's
-  /// background. If specified, it will be displayed behind the avatar.
-  ///
-  /// [backgroundImage]可以是头像背景图像的URL。如果指定，它将显示在头像后面。
-  ///
-  /// The [backgroundColor] parameter sets the background color of the avatar if
-  /// [backgroundImage] is not provided.
-  ///
-  /// 如果没有提供[backgroundImage]，则[backgroundColor]参数设置头像的背景颜色。
-  ///
-  /// The [image] parameter is used to set the avatar's image, which can be
-  /// either a network URL or a local asset path.
-  ///
-  /// [image]参数用于设置头像的图像，可以是网络URL或本地资源路径。
-  ///
-  /// The [margin] parameter controls the margin around the entire avatar, and
-  /// the [padding] parameter is used to apply internal padding, affecting only
-  /// the avatar's image.
-  ///
-  /// [margin]参数控制整个头像周围的边距，[padding]参数用于应用内部填充，仅影响头像图像。
   const Avatar({
     super.key,
     this.size = 100,
@@ -122,6 +86,7 @@ class Avatar extends StatelessWidget {
     this.textMode = false,
     this.upperCase = false,
     this.wordsCount,
+    this.fileImage,
   });
 
   @override
@@ -138,6 +103,7 @@ class Avatar extends StatelessWidget {
             size: size,
             backgroundColor: _getBgColor(),
             borderRadius: borderRadius,
+            backgroundImage: backgroundImage,
           ),
 
           // 2. 中间层
@@ -159,8 +125,9 @@ class Avatar extends StatelessWidget {
             ),
           ),
 
-          // 3.1 Avatar Layer
+          // 3.1 Image Layer
           // 3.1 图像层
+          // 3.2 Text Layer
           // 3.2 文字层
           textMode
               ? TextLayer(
@@ -169,11 +136,27 @@ class Avatar extends StatelessWidget {
                   text: _getDisplayStr(),
                   borderRadius: borderRadius,
                 )
-              : ImagerLayer(
-                  size: size,
-                  padding: padding,
-                  image: image,
-                  borderRadius: borderRadius,
+              // : kIsWeb
+              //     ? ImagerLayer(
+              //         size: size,
+              //         padding: padding,
+              //         image: image,
+              //         borderRadius: borderRadius,
+              //         fileImage: fileImage,
+              //       )
+              //     : ImagerLayer(
+              //         size: size,
+              //         padding: padding,
+              //         image: image,
+              //         borderRadius: borderRadius,
+              //         fileImage: fileImage,
+              //       ),
+              : getImageLayerWidget(
+                  size,
+                  padding,
+                  image,
+                  borderRadius,
+                  fileImage,
                 ),
 
           // 4. 边框层
@@ -213,7 +196,7 @@ class Avatar extends StatelessWidget {
       // 返回charList的第一个和第二个元素的首字母
       return '${charList[0][0].trim()}${charList[1][0].trim()}';
     }
-    print('DisplayStr ========================= ${str[0]}');
+    debugPrint('AvatarText ====== ${str[0]}');
     // 否则，返回newText的首字母
     return str[0];
   }

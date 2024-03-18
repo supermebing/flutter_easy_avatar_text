@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BackgroundLayer extends StatelessWidget {
   final double size;
@@ -24,33 +25,29 @@ class BackgroundLayer extends StatelessWidget {
               height: size,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
-                child: Image.network(
-                  backgroundImage!,
+                child: CachedNetworkImage(
+                  imageUrl: backgroundImage!,
                   width: size,
                   height: size,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    // 如果背景图片加载失败，不再显示背景图
-                    return Container(
-                      width: size,
-                      height: size,
-                      decoration: BoxDecoration(
-                        // border: interlayerBorder,
-                        borderRadius: BorderRadius.circular(borderRadius),
-                        color: backgroundColor,
-                      ),
-                    );
-                  },
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      color: backgroundColor,
+                    ),
+                  ),
                 ),
               ),
             )
-
           // 未指定背景图时，采用纯色默认背景图
           : Container(
               width: size,
               height: size,
               decoration: BoxDecoration(
-                // border: interlayerBorder,
                 borderRadius: BorderRadius.circular(borderRadius),
                 color: backgroundColor,
               ),
