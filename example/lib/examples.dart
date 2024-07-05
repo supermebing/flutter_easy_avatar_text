@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:easy_avatar/easy_avatar.dart';
+import 'package:easy_avatar/easy_avatar_text.dart';
 
 class MyAvatarExample extends StatelessWidget {
   static const String url = '/MyAvatarExample';
@@ -48,16 +48,14 @@ class MyAvatarExample extends StatelessWidget {
                   const Avatar(
                     size: 200,
                     borderRadius: 100,
-                    image:
-                        'https://profile-avatar.csdnimg.cn/bb869bb0b79b48209c6206043890c985_qq_28550263.jpg',
+                    image: 'https://profile-avatar.csdnimg.cn/bb869bb0b79b48209c6206043890c985_qq_28550263.jpg',
                   ),
                   // 即使是一个动图也无所谓，并且可以添加一点外边距
                   const Avatar(
                     size: 200,
                     margin: EdgeInsets.all(6),
                     borderRadius: 60,
-                    image:
-                        'https://github.githubassets.com/images/mona-loading-dimmed.gif',
+                    image: 'https://github.githubassets.com/images/mona-loading-dimmed.gif',
                   ),
                   // 如果头像本身是透明背景的，可以看到默认背景色 或 背景图片
                   Avatar(
@@ -74,8 +72,7 @@ class MyAvatarExample extends StatelessWidget {
                       style: BorderStyle.solid,
                       strokeAlign: BorderSide.strokeAlignInside,
                     ),
-                    image:
-                        'https://gitee.com/jacklee1995/example-pictures/raw/master/asian/asian-girl-avatar.png',
+                    image: 'https://gitee.com/jacklee1995/example-pictures/raw/master/asian/asian-girl-avatar.png',
                   ),
 
                   // 一个使用网络图片作为背景图的例子
@@ -85,8 +82,7 @@ class MyAvatarExample extends StatelessWidget {
                     borderRadius: 80,
                     backgroundImage:
                         'https://gitee.com/jacklee1995/example-pictures/raw/master/scenery/jonathanvasquez8950_scenery_2f6031d1-c4fe-41d7-8abf-d1c9c40d9981.png',
-                    image:
-                        'https://gitee.com/jacklee1995/example-pictures/raw/master/asian/asian-girl-avatar.png',
+                    image: 'https://gitee.com/jacklee1995/example-pictures/raw/master/asian/asian-girl-avatar.png',
                   ),
 
                   // 一个头像爬出相框的例子

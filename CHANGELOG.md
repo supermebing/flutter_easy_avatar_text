@@ -1,5 +1,7 @@
 # CHANGELOGS
+## v3.1.0
 
+### 中文 Support
 ## v3.0.0
 
 ### SVG Support
