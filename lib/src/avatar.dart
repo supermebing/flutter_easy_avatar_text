@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'background_layer.dart';
 
 import 'text_layer.dart';
